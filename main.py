@@ -104,11 +104,21 @@ def load_dataset(sciezka, naglowki, separator):
             print('Podano nieprawidłową wartość')
         match choice_2:
             case 1:
-                print(dane)
+                podzielnik = wartosci_podzialu(dane)
+                if podzielnik[0] == 1:
+                    [print(el) for el in dane]
+                elif podzielnik[0] == 2:
+                    print(dane[:podzielnik[1]])
+                elif podzielnik[0] == 3:
+                    print(dane[podzielnik[1]-1:podzielnik[2]:podzielnik[3]])
+                else:
+                    pass
                 kontunuacja()
+            case 2:
+                podzial_zbioru(dane)
             case 0:
                 return 0
-    match
+
 
 if __name__ == "__main__":
     filepath = ''
