@@ -3,6 +3,7 @@ import csv
 import time
 import sys
 from funkcje import *
+import random
 
 def local_file():
     rozszerzenia = ['.xlsx', '.data', '.csv', '.xls']

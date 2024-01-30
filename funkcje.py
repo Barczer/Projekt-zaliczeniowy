@@ -1,3 +1,5 @@
+import random
+
 def menu_naglowki():
     print(40*'*')
     print('''Dostępne akcje dla pliku:
@@ -84,8 +86,8 @@ def podzial_zbioru(dataset):
         else:
             print('Nie mogę podzielić więcej niż 100%!')
     dane_treningowe_liczba = len(dataset)*wartosc_1/100
-    dane_treningowe = dataset[:dane_treningowe_liczba]
-    dane_testowe_liczba = len(dataset)*wartosc_1/100+len(dataset)*wartosc_2/100
-    dane_testowe = dataset[dane_treningowe_liczba:dane_testowe_liczba]
-    dane_walidayjne_liczba = len(dataset)*wartosc_1/100+len(dataset)*wartosc_2/100+len(dataset)*wartosc_3/100
-    dane_walidayjne = dataset[dane_treningowe_liczba:dane_walidayjne_liczba] 
+    dane_testowe_liczba = len(dataset)*wartosc_2/100
+    dane_walidayjne_liczba = len(dataset)*wartosc_3/100
+
+    dane_treningowe =[]
+    random.sample(range(0, 50), 10)
