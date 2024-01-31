@@ -106,7 +106,9 @@ def load_dataset(sciezka, naglowki, separator):
         match choice_2:
             case 1:
                 podzielnik = wartosci_podzialu(dane)
-                if podzielnik[0] == 1:
+                if podzielnik == 0:
+                    return 0
+                elif podzielnik[0] == 1:
                     [print(el) for el in dane]
                 elif podzielnik[0] == 2:
                     print(dane[:podzielnik[1]])

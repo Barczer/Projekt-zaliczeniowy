@@ -30,7 +30,8 @@ def wartosci_podzialu(dataset):
     print('''
     1. Cały plik
     2. Liczbę wierszy
-    3. Zakres wierszy''')
+    3. Zakres wierszy
+    0: Powrót''')
     try:
         choice = int(input('Wybierz opcję: '))
     except:
@@ -71,6 +72,8 @@ def wartosci_podzialu(dataset):
                 else:
                     break
             return (3, poczatek, koniec, krok)
+        case 0:
+            return 0
                 
                 
 def podzial_zbioru(dataset):
@@ -85,9 +88,42 @@ def podzial_zbioru(dataset):
             break
         else:
             print('Nie mogę podzielić więcej niż 100%!')
-    dane_treningowe_liczba = len(dataset)*wartosc_1/100
-    dane_testowe_liczba = len(dataset)*wartosc_2/100
-    dane_walidayjne_liczba = len(dataset)*wartosc_3/100
+    dane_treningowe_liczba = int(round((len(dataset)*wartosc_1/100), 0))
+    dane_testowe_liczba = int(round((len(dataset)*wartosc_2/100), 0))
+    dane_walidayjne_liczba = int(round((len(dataset)*wartosc_3/100),0))
+    # print(f'dane treningwe = {dane_treningowe_liczba}\ndane testowe = {dane_testowe_liczba}\ndane walidacyjne = {dane_walidayjne_liczba}')
+    # print(f'Suma wartości = {dane_walidayjne_liczba + dane_testowe_liczba + dane_treningowe_liczba}')
+    rand_list = random.sample(range(0, len(dataset)), len(dataset))
+    # print(f'type dane = {type(dane_treningowe_liczba)}')
+    # kontunuacja()
+    rand_list_treningowe = rand_list[0:dane_treningowe_liczba]
+    # kontunuacja()
+    rand_list = rand_list[dane_treningowe_liczba:]
+    rand_list_testowe = rand_list[0:dane_testowe_liczba]
+    rand_list = rand_list[dane_testowe_liczba:]
+    rand_list_walidacyjne = rand_list[0:]
+    dane_treningowe = []
+    dane_testowe = []
+    dane_walidacyjne = []
+    iter = []
+    for i in rand_list_treningowe:
+        dane_treningowe.append(dataset[i])
+        iter.append(i)
+    for i in rand_list_testowe:
+        dane_testowe.append(dataset[i])
+        iter.append(i)
+    for i in rand_list_walidacyjne:
+        dane_walidacyjne.append(dataset[i])
+        iter.append(i)
+    iter.sort()
+    print(f'Iter = {iter}')
+    print(f'Długość iter = {len(iter)}')
+    print(f'Długość list losowych = {len(rand_list_testowe)+len(rand_list_walidacyjne)+len(rand_list_treningowe)}')
+    # print(f'Dane treningowe = {dane_treningowe}')
+    # print(f'Dane testowe = {dane_testowe}')
+    # print(f'Dane walidacyjne = {dane_walidacyjne}')
+    print(f'Długość list po podziale = {len(dane_treningowe)+len(dane_testowe)+len(dane_walidacyjne)}')
+    kontunuacja()
 
-    dane_treningowe =[]
-    random.sample(range(0, 50), 10)
+
+
