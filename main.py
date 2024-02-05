@@ -95,10 +95,7 @@ def load_dataset(sciezka, naglowki, separator):
         time.sleep(3)
         return 0
     while True:
-        if naglowki == 't':
-            menu_naglowki()
-        else:
-            menu_bez_naglowkow()
+        menu_naglowki()
         try:
             choice_2 = int(input('Jaką czynność wybierasz?: '))
         except:
@@ -119,6 +116,19 @@ def load_dataset(sciezka, naglowki, separator):
                 kontunuacja()
             case 2:
                 podzial_zbioru(dane)
+            case 3:
+                if naglowki == 't':
+                    pass
+                else:
+                    print('''
+                          
+                          
+                W datasecie brak nagłówków
+                          
+                          
+                          ''')
+                    kontunuacja()
+                    clear_terminal()
             case 0:
                 return 0
 

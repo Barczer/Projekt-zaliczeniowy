@@ -1,23 +1,17 @@
 import random
+import os
+
+def clear_terminal():
+    os.system('clear')
 
 def menu_naglowki():
     print(40*'*')
     print('''Dostępne akcje dla pliku:
     1: Wydrukuj zestaw danych
     2: Podział zbioru danych na zbiory testowe i treningowe
-    3:
+    3: Wydrukowanie nagłówków 
     4:
     5:
-    0: Powrót
-    ''')
-    print(40*'*')
-def menu_bez_naglowkow():
-    print(40*'*')
-    print('''Dostępne akcje dla pliku:
-    1: Wydrukuj zestaw danych
-    2: Podział zbioru danych na zbiory testowe i treningowe
-    3:
-    4:
     0: Powrót
     ''')
     print(40*'*')
@@ -102,28 +96,44 @@ def podzial_zbioru(dataset):
     rand_list_testowe = rand_list[0:dane_testowe_liczba]
     rand_list = rand_list[dane_testowe_liczba:]
     rand_list_walidacyjne = rand_list[0:]
-    dane_treningowe = []
-    dane_testowe = []
-    dane_walidacyjne = []
-    iter = []
-    for i in rand_list_treningowe:
-        dane_treningowe.append(dataset[i])
-        iter.append(i)
-    for i in rand_list_testowe:
-        dane_testowe.append(dataset[i])
-        iter.append(i)
-    for i in rand_list_walidacyjne:
-        dane_walidacyjne.append(dataset[i])
-        iter.append(i)
-    iter.sort()
-    print(f'Iter = {iter}')
-    print(f'Długość iter = {len(iter)}')
-    print(f'Długość list losowych = {len(rand_list_testowe)+len(rand_list_walidacyjne)+len(rand_list_treningowe)}')
-    # print(f'Dane treningowe = {dane_treningowe}')
-    # print(f'Dane testowe = {dane_testowe}')
-    # print(f'Dane walidacyjne = {dane_walidacyjne}')
-    print(f'Długość list po podziale = {len(dane_treningowe)+len(dane_testowe)+len(dane_walidacyjne)}')
-    kontunuacja()
-
+    dane_treningowe = [dataset[i] for i in rand_list_treningowe]
+    dane_testowe = [dataset[i] for i in rand_list_testowe]
+    dane_walidacyjne = [dataset[i] for i in rand_list_walidacyjne]
+    while True:
+        print('''
+        Który zbiór chcesz wyświetlić?
+        1. Treningowy
+        2. Testowy
+        3. Walidacyjny
+        4. Wszystkie
+        0. Powrót''')
+        try:
+            choice = int(input(': '))
+        except:
+            print('Wprowadzono błędną wartość.')
+        match choice:
+            case 1:
+                [print(el) for el in dane_treningowe]
+                kontunuacja()
+                clear_terminal()
+            case 2:
+                [print(el) for el in dane_testowe]
+                kontunuacja()
+                clear_terminal()
+            case 3:
+                [print(el) for el in dane_walidacyjne]
+                kontunuacja()
+                clear_terminal()
+            case 4:
+                print('Dane treningowe')
+                [print(el) for el in dane_treningowe]
+                print('Dane testowe')
+                [print(el) for el in dane_testowe]
+                print('Dane Walidacyjne')
+                [print(el) for el in dane_walidacyjne]
+                kontunuacja()
+                clear_terminal()
+            case 0:
+                return 0
 
 
