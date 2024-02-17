@@ -10,8 +10,8 @@ def menu_naglowki():
     1: Wydrukuj zestaw danych
     2: Podział zbioru danych na zbiory testowe i treningowe
     3: Wydrukowanie nagłówków 
-    4:
-    5:
+    4: Klasy decyzyjne
+    5: 
     0: Powrót
     ''')
     print(40*'*')
@@ -137,3 +137,24 @@ def podzial_zbioru(dataset):
                 return 0
 
 
+def klasy_decyzyjne(dataset):
+    print(f'Wskaż, które element listy to kasa decyzyjna: ')
+    i = 1
+    for el in dataset[0]:
+        print(f'{i}: {el}')
+        i += 1
+    try:
+        choice_class = int(input(': '))
+    except:
+        print('Błędna wartość!')
+    choice_class -= 1
+
+    wartosci = {}
+    for list in dataset:
+        class_name = list[choice_class]
+        if class_name not in wartosci.keys():
+            wartosci[class_name] = 1
+        else:
+            wartosci[class_name] += 1
+    [print(f'Klasa: {class_key}, liczebność: {value}') for class_key, value in wartosci.items()]
+    kontunuacja()

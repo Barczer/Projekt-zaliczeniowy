@@ -83,8 +83,13 @@ def load_dataset(sciezka, naglowki, separator):
                 for row in reader:
                     lista_naglowki = row
                     break
+                i = 1
                 for row in reader:
-                    dane.append(row)
+                    if i == 1:
+                        continue
+                    else:
+                        dane.append(row)
+                    i += 1
             else:
                 for row in reader:
                     dane.append(row)
@@ -129,6 +134,8 @@ def load_dataset(sciezka, naglowki, separator):
                           ''')
                     kontunuacja()
                     clear_terminal()
+            case 4:
+                klasy_decyzyjne(dane)
             case 0:
                 return 0
 
