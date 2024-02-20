@@ -1,5 +1,6 @@
 import random
 import os
+import csv
 
 def clear_terminal():
     os.system('clear')
@@ -156,5 +157,68 @@ def klasy_decyzyjne(dataset):
             wartosci[class_name] = 1
         else:
             wartosci[class_name] += 1
-    [print(f'Klasa: {class_key}, liczebność: {value}') for class_key, value in wartosci.items()]
-    kontunuacja()
+    # [print(f'Klasa: {class_key}, liczebność: {value}') for class_key, value in wartosci.items()]
+    i = 1
+    for class_key, value in wartosci.items():
+        print(f'{i}: {class_key}, liczebność zbioru: {value}')
+        i += 1
+    while True:
+        choice_class = input('Czy chcesz wyświelić któryś z elementów? T/n: ').lower()
+        if choice_class not in ['t', 'n']:
+            print('Nieprawidłowa wartość!')
+        elif choice_class == 't':
+            keys = [keys for keys, value in wartosci.items()]
+            break
+        else:
+            return 0
+
+    while True:
+        try:
+            i = 1
+            for class_key, value in wartosci.items():
+                print(f'{i}: {class_key}')
+                i += 1
+            choice_class = int(input('Którą klasę chcesz wyświetlić?: '))
+            if choice_class > len(keys) or choice_class < 0:
+                print('Wartość z poza listy!')
+                continue
+            elif choice_class == 0:
+                return 0
+        except:
+            print('Nieprawidłowa wartość!')
+        temp_set = []
+        for set in dataset:
+            if keys[choice_class-1] in set:
+                print(set)
+                temp_set.append(set)
+        save_csv_menu(temp_set)
+        while True:
+            choice_class_2 = input('Czy chcesz wydrukować jeszcze jakąś klase?: T/n').lower()
+            if choice_class_2 not in ['t', 'n']:
+                print('Nieprawidłowa wartość!')
+            else:
+                break
+        if choice_class_2 == 't':
+            continue
+        else:
+            break
+
+def save_csv_file(data, file_name):
+    with open (f'{file_name}.csv', 'w', newline='') as csv_file:
+        csvwriter = csv.writer(csv_file, delimiter=';')
+        csvwriter.writerows(data)
+def save_csv_menu(date):
+    date = date
+    while True:
+        choice_csv = input('Czy chcesz zapisać dane? T/n: ').lower()
+        if choice_csv not in ['t', 'n']:
+            print('Nieprawidłowa wartość!')
+            continue
+        else:
+            break
+    if choice_csv == 't':
+        file_name = input('Podaj nazwę pliku: ')
+        save_csv_file(date, file_name)
+        return 0
+    else:
+        return 0

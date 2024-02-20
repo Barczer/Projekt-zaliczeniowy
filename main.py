@@ -39,7 +39,6 @@ def local_file():
             print('Wprowadzono niepoprawną wartość.')
     while True:
         separator = input('Podaj separator (domyślnie to ";"): ')
-        # print(f'sep = {separator}\nlen sep = {len(separator)}')
         if len(separator) == 1:
             break
         elif len(separator) == 0:
@@ -123,7 +122,7 @@ def load_dataset(sciezka, naglowki, separator):
                 podzial_zbioru(dane)
             case 3:
                 if naglowki == 't':
-                    pass
+                    print(lista_naglowki)
                 else:
                     print('''
                           
