@@ -48,8 +48,31 @@ def local_file():
             print('Wygląda na to, że wprowadziłeś więcej niż jeden separator!')
     load_dataset(lista_datasetow[lp_data_set], czy_naglowki, separator)
 
+def filepath():
+    while True:
+        file_path = input('Podaj dokładną ścieżkę do pliku: ')
+        if os.path.isfile(file_path):
+            break
+        else:
+            print('Podany plik nie istnieje!')
+    while True:
+        czy_naglowki = input('Czy zestaw zawiera nagłówki? T/n: ').lower()
+        if czy_naglowki == 't' or czy_naglowki == 'n':
+            break
+        else:
+            print('Wprowadzono niepoprawną wartość.')
+    while True:
+        separator = input('Podaj separator (domyślnie to ";"): ')
+        if len(separator) == 1:
+            break
+        elif len(separator) == 0:
+            separator = ';'
+            break
+        else:
+            print('Wygląda na to, że wprowadziłeś więcej niż jeden separator!')
+    load_dataset(file_path, czy_naglowki, separator)
 
-def main(filepath):
+def main():
     """ główna funkcja modułu"""
     while True:
         print('*'*40)
@@ -69,7 +92,7 @@ def main(filepath):
             case 1:
                 local_file()
             case 2:
-                pass
+                filepath()
             case 0:
                 exit('Do zobaczenia!', )
 
@@ -78,14 +101,12 @@ def load_dataset(sciezka, naglowki, separator):
         with open(sciezka, 'r') as file:
             reader = csv.reader(file, delimiter=separator)
             dane = []
+            lista_naglowki = []
             if naglowki == 't':
-                for row in reader:
-                    lista_naglowki = row
-                    break
                 i = 1
                 for row in reader:
                     if i == 1:
-                        continue
+                        lista_naglowki = row
                     else:
                         dane.append(row)
                     i += 1
@@ -111,15 +132,18 @@ def load_dataset(sciezka, naglowki, separator):
                     return 0
                 elif podzielnik[0] == 1:
                     [print(el) for el in dane]
+                    save_csv_menu(dane, naglowki, lista_naglowki)
                 elif podzielnik[0] == 2:
-                    print(dane[:podzielnik[1]])
+                    [print(el) for el in dane[:podzielnik][1]]
+                    save_csv_menu(dane[:podzielnik[1]], naglowki, lista_naglowki)
                 elif podzielnik[0] == 3:
                     print(dane[podzielnik[1]-1:podzielnik[2]:podzielnik[3]])
+                    # dopisać zapisywanie pliku do csv
                 else:
                     pass
                 kontunuacja()
             case 2:
-                podzial_zbioru(dane)
+                podzial_zbioru(dane, naglowki, lista_naglowki)
             case 3:
                 if naglowki == 't':
                     print(lista_naglowki)
@@ -134,11 +158,10 @@ def load_dataset(sciezka, naglowki, separator):
                     kontunuacja()
                     clear_terminal()
             case 4:
-                klasy_decyzyjne(dane)
+                klasy_decyzyjne(dane, naglowki, lista_naglowki)
             case 0:
                 return 0
 
 
 if __name__ == "__main__":
-    filepath = ''
-    main(filepath)
+    main()

@@ -36,8 +36,13 @@ def wartosci_podzialu(dataset):
             return (1, 'all')
         case 2:
             try:
-                liczba_wierszy = int(input('Podaj liczbę wierszy: '))
-                return (2, liczba_wierszy)
+                while True:
+                    liczba_wierszy = int(input('Podaj liczbę wierszy: '))
+                    if liczba_wierszy > len(dataset):
+                        print(f'Maksymalna liczba wierszy to: {len(dataset)}')
+                        continue
+                    else:
+                        return (2, liczba_wierszy)
             except:
                 print('Wprowadzono nieprawidłową wartość')
         case 3:
@@ -47,7 +52,13 @@ def wartosci_podzialu(dataset):
                 except:
                     print('Wprowadzono nieprawidłową wartość')
                 try:
-                    koniec = int(input(f'Podaj koniec zakresu (maksymalna wartość to {len(dataset)}): '))
+                    while True:
+                        koniec = int(input(f'Podaj koniec zakresu (maksymalna wartość to {len(dataset)}): '))
+                        if koniec > len(dataset):
+                            print(f'Koniec zakresu poza długością datasetu! Maksymalna długość: {len(dataset)}')
+                            continue
+                        else:
+                            break
                 except:
                     print('Wprowadzono nieprawidłową wartość')
                 try:
@@ -71,7 +82,7 @@ def wartosci_podzialu(dataset):
             return 0
                 
                 
-def podzial_zbioru(dataset):
+def podzial_zbioru(dataset, naglowki, naglowki_dane):
     while True:
         try:
             wartosc_1 = int(input('Podaj procent zbioru treningowego: '))
@@ -115,14 +126,17 @@ def podzial_zbioru(dataset):
         match choice:
             case 1:
                 [print(el) for el in dane_treningowe]
+                save_csv_menu(dane_treningowe, naglowki, naglowki_dane)
                 kontunuacja()
                 clear_terminal()
             case 2:
                 [print(el) for el in dane_testowe]
+                save_csv_menu(dane_testowe, naglowki, naglowki_dane)
                 kontunuacja()
                 clear_terminal()
             case 3:
                 [print(el) for el in dane_walidacyjne]
+                save_csv_menu(dane_walidacyjne, naglowki, naglowki_dane)
                 kontunuacja()
                 clear_terminal()
             case 4:
@@ -132,13 +146,14 @@ def podzial_zbioru(dataset):
                 [print(el) for el in dane_testowe]
                 print('Dane Walidacyjne')
                 [print(el) for el in dane_walidacyjne]
+                save_csv_menu(dataset, naglowki, naglowki_dane)
                 kontunuacja()
                 clear_terminal()
             case 0:
                 return 0
 
 
-def klasy_decyzyjne(dataset):
+def klasy_decyzyjne(dataset, naglowki, naglowki_dane):
     print(f'Wskaż, które element listy to kasa decyzyjna: ')
     i = 1
     for el in dataset[0]:
@@ -191,7 +206,7 @@ def klasy_decyzyjne(dataset):
             if keys[choice_class-1] in set:
                 print(set)
                 temp_set.append(set)
-        save_csv_menu(temp_set)
+        save_csv_menu(temp_set, naglowki, naglowki_dane)
         while True:
             choice_class_2 = input('Czy chcesz wydrukować jeszcze jakąś klase?: T/n').lower()
             if choice_class_2 not in ['t', 'n']:
@@ -207,7 +222,7 @@ def save_csv_file(data, file_name):
     with open (f'{file_name}.csv', 'w', newline='') as csv_file:
         csvwriter = csv.writer(csv_file, delimiter=';')
         csvwriter.writerows(data)
-def save_csv_menu(date):
+def save_csv_menu(date, naglowki, naglowki_dane):
     date = date
     while True:
         choice_csv = input('Czy chcesz zapisać dane? T/n: ').lower()
@@ -217,8 +232,14 @@ def save_csv_menu(date):
         else:
             break
     if choice_csv == 't':
+        if naglowki == 't':
+            temp_date = date[:]
+            temp_date.insert(0, naglowki_dane)
+        else:
+            temp_date = date
         file_name = input('Podaj nazwę pliku: ')
-        save_csv_file(date, file_name)
+        save_csv_file(temp_date, file_name)
+        print('Plik został pomyślnie zapisany.')
         return 0
     else:
         return 0
