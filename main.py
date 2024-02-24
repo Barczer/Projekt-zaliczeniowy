@@ -6,24 +6,27 @@ from funkcje import *
 import random
 
 def local_file():
-    rozszerzenia = ['.xlsx', '.data', '.csv', '.xls']
+    extensions = ['.xlsx', '.data', '.csv', '.xls']
     os.system('cls')
-    lista_plikow_all = os.listdir()
-    lista_datasetow = [el for el in lista_plikow_all if el[el.find('.'):] in rozszerzenia]
-    if len(lista_datasetow) > 0:
+    list_file_all = os.listdir()
+    data_set_list = [el for el in list_file_all if el[el.find('.'):] in extensions]
+    if len(data_set_list) > 0:
         print('LISTA PLIKÓW')
     else:
-        print(f'Brak plików lokalnych z rozszerzeniem {rozszerzenia}')
+        print(f'Brak plików lokalnych z rozszerzeniem {extensions}')
         return 0
     i = 1
-    while i <= len(lista_datasetow):
-        print(f'{i}: {lista_datasetow[i - 1]}')
-        if i == len(lista_datasetow):
+    while i <= len(data_set_list):
+        print(f'{i}: {data_set_list[i - 1]}')
+        if i == len(data_set_list):
             print('0: Powrót do poprzedniego menu')
         i += 1
     while True:
         try:
             choice_2 = int(input('Wybierz dateset: '))
+            if choice_2 > len(data_set_list):
+                print('Nie ma takiego pliku!')
+                continue
             break
         except:
             print('Wprowadzono niepoprawną wartość!')
@@ -32,8 +35,8 @@ def local_file():
     else:
         return 0
     while True:
-        czy_naglowki = input('Czy zestaw zawiera nagłówki? T/n: ').lower()
-        if czy_naglowki == 't' or czy_naglowki == 'n':
+        is_header = input('Czy zestaw zawiera nagłówki? T/n: ').lower()
+        if is_header == 't' or is_header == 'n':
             break
         else:
             print('Wprowadzono niepoprawną wartość.')
@@ -46,7 +49,7 @@ def local_file():
             break
         else:
             print('Wygląda na to, że wprowadziłeś więcej niż jeden separator!')
-    load_dataset(lista_datasetow[lp_data_set], czy_naglowki, separator)
+    load_dataset(data_set_list[lp_data_set], is_header, separator)
 
 def filepath():
     while True:
@@ -56,8 +59,8 @@ def filepath():
         else:
             print('Podany plik nie istnieje!')
     while True:
-        czy_naglowki = input('Czy zestaw zawiera nagłówki? T/n: ').lower()
-        if czy_naglowki == 't' or czy_naglowki == 'n':
+        is_header = input('Czy zestaw zawiera nagłówki? T/n: ').lower()
+        if is_header == 't' or is_header == 'n':
             break
         else:
             print('Wprowadzono niepoprawną wartość.')
@@ -70,7 +73,7 @@ def filepath():
             break
         else:
             print('Wygląda na to, że wprowadziłeś więcej niż jeden separator!')
-    load_dataset(file_path, czy_naglowki, separator)
+    load_dataset(file_path, is_header, separator)
 
 def main():
     """ główna funkcja modułu"""
@@ -96,57 +99,57 @@ def main():
             case 0:
                 exit('Do zobaczenia!', )
 
-def load_dataset(sciezka, naglowki, separator):
+def load_dataset(file_path, is_header, separator):
     try:
-        with open(sciezka, 'r') as file:
+        with open(file_path, 'r') as file:
             reader = csv.reader(file, delimiter=separator)
-            dane = []
-            lista_naglowki = []
-            if naglowki == 't':
+            date = []
+            header_list = []
+            if is_header == 't':
                 i = 1
                 for row in reader:
                     if i == 1:
-                        lista_naglowki = row
+                        header_list = row
                     else:
-                        dane.append(row)
+                        date.append(row)
                     i += 1
             else:
                 for row in reader:
-                    dane.append(row)
-        if len(dane[len(dane)-1]) == 0:
-            dane = dane[:-1]
+                    date.append(row)
+        if len(date[len(date)-1]) == 0:
+            date = date[:-1]
     except:
         print(f'Błąd przy wczytywaniu danych {sys.exc_info()}. Powrót do menu głównego...')
         time.sleep(3)
         return 0
     while True:
-        menu_naglowki()
+        head_menu()
         try:
             choice_2 = int(input('Jaką czynność wybierasz?: '))
         except:
             print('Podano nieprawidłową wartość')
         match choice_2:
             case 1:
-                podzielnik = wartosci_podzialu(dane)
-                if podzielnik == 0:
+                print_choice = print_menu(date)
+                if print_choice == 0:
                     return 0
-                elif podzielnik[0] == 1:
-                    [print(el) for el in dane]
-                    save_csv_menu(dane, naglowki, lista_naglowki)
-                elif podzielnik[0] == 2:
-                    [print(el) for el in dane[:podzielnik][1]]
-                    save_csv_menu(dane[:podzielnik[1]], naglowki, lista_naglowki)
-                elif podzielnik[0] == 3:
-                    print(dane[podzielnik[1]-1:podzielnik[2]:podzielnik[3]])
+                elif print_choice[0] == 1:
+                    [print(el) for el in date]
+                    save_csv_menu(date, is_header, header_list)
+                elif print_choice[0] == 2:
+                    [print(el) for el in date[:print_choice][1]]
+                    save_csv_menu(date[:print_choice[1]], is_header, header_list)
+                elif print_choice[0] == 3:
+                    print(date[print_choice[1]-1:print_choice[2]:print_choice[3]])
                     # dopisać zapisywanie pliku do csv
                 else:
                     pass
-                kontunuacja()
+                continuation()
             case 2:
-                podzial_zbioru(dane, naglowki, lista_naglowki)
+                dataset_split(date, is_header, header_list)
             case 3:
-                if naglowki == 't':
-                    print(lista_naglowki)
+                if is_header == 't':
+                    print(header_list)
                 else:
                     print('''
                           
@@ -155,10 +158,10 @@ def load_dataset(sciezka, naglowki, separator):
                           
                           
                           ''')
-                    kontunuacja()
+                    continuation()
                     clear_terminal()
             case 4:
-                klasy_decyzyjne(dane, naglowki, lista_naglowki)
+                choice_class(date, is_header, header_list)
             case 0:
                 return 0
 

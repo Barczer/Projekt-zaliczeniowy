@@ -5,23 +5,22 @@ import csv
 def clear_terminal():
     os.system('clear')
 
-def menu_naglowki():
+def head_menu():
     print(40*'*')
     print('''Dostępne akcje dla pliku:
     1: Wydrukuj zestaw danych
     2: Podział zbioru danych na zbiory testowe i treningowe
     3: Wydrukowanie nagłówków 
     4: Klasy decyzyjne
-    5: 
     0: Powrót
     ''')
     print(40*'*')
 
-def kontunuacja():
+def continuation():
     input('Kliknij enter aby kontynuować...')
 
 
-def wartosci_podzialu(dataset):
+def print_menu(dataset):
     print('''
     1. Cały plik
     2. Liczbę wierszy
@@ -37,24 +36,24 @@ def wartosci_podzialu(dataset):
         case 2:
             try:
                 while True:
-                    liczba_wierszy = int(input('Podaj liczbę wierszy: '))
-                    if liczba_wierszy > len(dataset):
+                    row_count = int(input('Podaj liczbę wierszy: '))
+                    if row_count > len(dataset):
                         print(f'Maksymalna liczba wierszy to: {len(dataset)}')
                         continue
                     else:
-                        return (2, liczba_wierszy)
+                        return (2, row_count)
             except:
                 print('Wprowadzono nieprawidłową wartość')
         case 3:
             while True:
                 try:
-                    poczatek = int(input('Podaj początek zakresu: '))
+                    start = int(input('Podaj początek zakresu: '))
                 except:
                     print('Wprowadzono nieprawidłową wartość')
                 try:
                     while True:
-                        koniec = int(input(f'Podaj koniec zakresu (maksymalna wartość to {len(dataset)}): '))
-                        if koniec > len(dataset):
+                        end = int(input(f'Podaj koniec zakresu (maksymalna wartość to {len(dataset)}): '))
+                        if end > len(dataset):
                             print(f'Koniec zakresu poza długością datasetu! Maksymalna długość: {len(dataset)}')
                             continue
                         else:
@@ -62,55 +61,50 @@ def wartosci_podzialu(dataset):
                 except:
                     print('Wprowadzono nieprawidłową wartość')
                 try:
-                    krok = input('Podaj krok (domyślnie 1): ')
-                    if len(krok) == 0:
-                        krok = 1
+                    step = input('Podaj step (domyślnie 1): ')
+                    if len(step) == 0:
+                        step = 1
                     else:
-                        krok = int(krok)
+                        step = int(step)
                 except:
                     print('Wprowadzono nieprawidłową wartość')
-                if koniec < poczatek:
+                if end < start:
                     print('Wprowadzono błędne zakresy! punkt końcowy nie może być mniejszy od punktu początkowego')
                     continue
-                elif koniec < 0 or poczatek < 0:
+                elif end < 0 or start < 0:
                     print('Wartości nie mogą być minusowe')
                     continue
                 else:
                     break
-            return (3, poczatek, koniec, krok)
+            return (3, start, end, step)
         case 0:
             return 0
                 
                 
-def podzial_zbioru(dataset, naglowki, naglowki_dane):
+def dataset_split(dataset, header, header_list):
     while True:
         try:
-            wartosc_1 = int(input('Podaj procent zbioru treningowego: '))
-            wartosc_2 = int(input('Podaj procent zbioru testowego: '))
-            wartosc_3 = int(input('Podaj procent zbioru walidacyjnego: '))
+            value_1 = int(input('Podaj procent zbioru treningowego: '))
+            value_2 = int(input('Podaj procent zbioru testowego: '))
+            value_3 = int(input('Podaj procent zbioru walidacyjnego: '))
         except:
             print('Podane wartości nie są liczbami')
-        if wartosc_1+wartosc_2+wartosc_3 == 100:
+        if value_1+value_2+value_3 == 100:
             break
         else:
             print('Nie mogę podzielić więcej niż 100%!')
-    dane_treningowe_liczba = int(round((len(dataset)*wartosc_1/100), 0))
-    dane_testowe_liczba = int(round((len(dataset)*wartosc_2/100), 0))
-    dane_walidayjne_liczba = int(round((len(dataset)*wartosc_3/100),0))
-    # print(f'dane treningwe = {dane_treningowe_liczba}\ndane testowe = {dane_testowe_liczba}\ndane walidacyjne = {dane_walidayjne_liczba}')
-    # print(f'Suma wartości = {dane_walidayjne_liczba + dane_testowe_liczba + dane_treningowe_liczba}')
+    training_data_number = int(round((len(dataset)*value_1/100), 0))
+    test_data_number = int(round((len(dataset)*value_2/100), 0))
+    validation_data_number = int(round((len(dataset)*value_3/100),0))
     rand_list = random.sample(range(0, len(dataset)), len(dataset))
-    # print(f'type dane = {type(dane_treningowe_liczba)}')
-    # kontunuacja()
-    rand_list_treningowe = rand_list[0:dane_treningowe_liczba]
-    # kontunuacja()
-    rand_list = rand_list[dane_treningowe_liczba:]
-    rand_list_testowe = rand_list[0:dane_testowe_liczba]
-    rand_list = rand_list[dane_testowe_liczba:]
-    rand_list_walidacyjne = rand_list[0:]
-    dane_treningowe = [dataset[i] for i in rand_list_treningowe]
-    dane_testowe = [dataset[i] for i in rand_list_testowe]
-    dane_walidacyjne = [dataset[i] for i in rand_list_walidacyjne]
+    rand_list_training = rand_list[0:training_data_number]
+    rand_list = rand_list[training_data_number:]
+    rand_list_test = rand_list[0:test_data_number]
+    rand_list = rand_list[test_data_number:]
+    rand_list_validation = rand_list[0:]
+    training_data = [dataset[i] for i in rand_list_training]
+    test_data = [dataset[i] for i in rand_list_test]
+    validation_data = [dataset[i] for i in rand_list_validation]
     while True:
         print('''
         Który zbiór chcesz wyświetlić?
@@ -125,35 +119,34 @@ def podzial_zbioru(dataset, naglowki, naglowki_dane):
             print('Wprowadzono błędną wartość.')
         match choice:
             case 1:
-                [print(el) for el in dane_treningowe]
-                save_csv_menu(dane_treningowe, naglowki, naglowki_dane)
-                kontunuacja()
+                [print(el) for el in training_data]
+                save_csv_menu(training_data, header, header_list)
+                continuation()
                 clear_terminal()
             case 2:
-                [print(el) for el in dane_testowe]
-                save_csv_menu(dane_testowe, naglowki, naglowki_dane)
-                kontunuacja()
+                [print(el) for el in test_data]
+                save_csv_menu(test_data, header, header_list)
+                continuation()
                 clear_terminal()
             case 3:
-                [print(el) for el in dane_walidacyjne]
-                save_csv_menu(dane_walidacyjne, naglowki, naglowki_dane)
-                kontunuacja()
+                [print(el) for el in validation_data]
+                save_csv_menu(validation_data, header, header_list)
+                continuation()
                 clear_terminal()
             case 4:
                 print('Dane treningowe')
-                [print(el) for el in dane_treningowe]
+                [print(el) for el in training_data]
                 print('Dane testowe')
-                [print(el) for el in dane_testowe]
+                [print(el) for el in test_data]
                 print('Dane Walidacyjne')
-                [print(el) for el in dane_walidacyjne]
-                save_csv_menu(dataset, naglowki, naglowki_dane)
-                kontunuacja()
+                [print(el) for el in validation_data]
+                save_csv_menu(dataset, header, header_list)
+                continuation()
                 clear_terminal()
             case 0:
                 return 0
 
-
-def klasy_decyzyjne(dataset, naglowki, naglowki_dane):
+def choice_class(dataset, header, header_list):
     print(f'Wskaż, które element listy to kasa decyzyjna: ')
     i = 1
     for el in dataset[0]:
@@ -165,16 +158,16 @@ def klasy_decyzyjne(dataset, naglowki, naglowki_dane):
         print('Błędna wartość!')
     choice_class -= 1
 
-    wartosci = {}
+    values = {}
     for list in dataset:
         class_name = list[choice_class]
-        if class_name not in wartosci.keys():
-            wartosci[class_name] = 1
+        if class_name not in values.keys():
+            values[class_name] = 1
         else:
-            wartosci[class_name] += 1
-    # [print(f'Klasa: {class_key}, liczebność: {value}') for class_key, value in wartosci.items()]
+            values[class_name] += 1
+    # [print(f'Klasa: {class_key}, liczebność: {value}') for class_key, value in values.items()]
     i = 1
-    for class_key, value in wartosci.items():
+    for class_key, value in values.items():
         print(f'{i}: {class_key}, liczebność zbioru: {value}')
         i += 1
     while True:
@@ -182,7 +175,7 @@ def klasy_decyzyjne(dataset, naglowki, naglowki_dane):
         if choice_class not in ['t', 'n']:
             print('Nieprawidłowa wartość!')
         elif choice_class == 't':
-            keys = [keys for keys, value in wartosci.items()]
+            keys = [keys for keys, value in values.items()]
             break
         else:
             return 0
@@ -190,7 +183,7 @@ def klasy_decyzyjne(dataset, naglowki, naglowki_dane):
     while True:
         try:
             i = 1
-            for class_key, value in wartosci.items():
+            for class_key, value in values.items():
                 print(f'{i}: {class_key}')
                 i += 1
             choice_class = int(input('Którą klasę chcesz wyświetlić?: '))
@@ -206,7 +199,7 @@ def klasy_decyzyjne(dataset, naglowki, naglowki_dane):
             if keys[choice_class-1] in set:
                 print(set)
                 temp_set.append(set)
-        save_csv_menu(temp_set, naglowki, naglowki_dane)
+        save_csv_menu(temp_set, header, header_list)
         while True:
             choice_class_2 = input('Czy chcesz wydrukować jeszcze jakąś klase?: T/n').lower()
             if choice_class_2 not in ['t', 'n']:
