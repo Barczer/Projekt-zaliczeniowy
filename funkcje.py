@@ -2,8 +2,6 @@ import random
 import os
 import csv
 
-def clear_terminal():
-    os.system('clear')
 
 def head_menu():
     print(40*'*')
@@ -121,18 +119,12 @@ def dataset_split(dataset, header, header_list):
             case 1:
                 [print(el) for el in training_data]
                 save_csv_menu(training_data, header, header_list)
-                continuation()
-                clear_terminal()
             case 2:
                 [print(el) for el in test_data]
                 save_csv_menu(test_data, header, header_list)
-                continuation()
-                clear_terminal()
             case 3:
                 [print(el) for el in validation_data]
                 save_csv_menu(validation_data, header, header_list)
-                continuation()
-                clear_terminal()
             case 4:
                 print('Dane treningowe')
                 [print(el) for el in training_data]
@@ -141,8 +133,6 @@ def dataset_split(dataset, header, header_list):
                 print('Dane Walidacyjne')
                 [print(el) for el in validation_data]
                 save_csv_menu(dataset, header, header_list)
-                continuation()
-                clear_terminal()
             case 0:
                 return 0
 

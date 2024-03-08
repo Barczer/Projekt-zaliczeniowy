@@ -137,14 +137,13 @@ def load_dataset(file_path, is_header, separator):
                     [print(el) for el in date]
                     save_csv_menu(date, is_header, header_list)
                 elif print_choice[0] == 2:
-                    [print(el) for el in date[:print_choice][1]]
+                    [print(el) for el in date[:print_choice[1]]]
                     save_csv_menu(date[:print_choice[1]], is_header, header_list)
                 elif print_choice[0] == 3:
                     print(date[print_choice[1]-1:print_choice[2]:print_choice[3]])
                     # dopisać zapisywanie pliku do csv
                 else:
                     pass
-                continuation()
             case 2:
                 dataset_split(date, is_header, header_list)
             case 3:
@@ -159,7 +158,6 @@ def load_dataset(file_path, is_header, separator):
                           
                           ''')
                     continuation()
-                    clear_terminal()
             case 4:
                 choice_class(date, is_header, header_list)
             case 0:
